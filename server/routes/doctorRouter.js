@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post("/doctor-info",authMiddleWare,doctorData)
 router.post("/doctorupdate-profile",storage.single('image'),authMiddleWare,updateDoctor)
-router.post("/get-doctor-info-by-id",authMiddleWare,getdoctorbyId)
+router.post("/get-doctor-info-by-id",getdoctorbyId)
 
 
 

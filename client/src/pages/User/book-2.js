@@ -25,12 +25,14 @@ function BookAppointment() {
   const [doctor, setDoctor] = useState(null);
   const params = useParams();
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
   // const [max, setMax] = useState(new  Date());
   // const [min ,setMin] = useState(new Date());
   const times =7;
 
-  
+  console.log("nameeeeeeeeee", name)
+  console.log("ageeeeee", age)
+  console.log("dateeeeee", date)
   console.log("timeeeeeeee", startDate)
 
   const getDoctorData = async () => {
@@ -58,19 +60,7 @@ function BookAppointment() {
     }
   };
 
-const mytime =doctor?.start;
-const mytimeto = doctor?.end;
-
-  const starttime = moment(mytime, ["hh:mm a"]).format("HH:mm");
-  const endtime=moment(mytimeto,["hh:mm a"]).format("HH:mm")
   
-
-  const mintime = starttime.split(":")[0]
-  const mintime_second = starttime.split(":")[1]
-  const maxtime = endtime.split(":")[0]
-  const maxtime_second = endtime.split(":")[1]
-
- 
 
 
   const checkAvailability = async () => {
@@ -80,9 +70,8 @@ const mytimeto = doctor?.end;
         "/api/user/check-booking-avilability",
         {
           doctorId: params.doctorId,
-          // date: date,
-          // time: time,
-          dateAndtime:startDate
+          date: date,
+          time: time,
 
         },
         {
@@ -114,7 +103,8 @@ const mytimeto = doctor?.end;
           userId: user._id,
           doctorInfo: doctor,
           userInfo: user,
-          dateAndtime:startDate,
+          date: date,
+          time: time,
           patientname: name,
           patientage: age,
           phonenumber: phonenumber,
@@ -239,14 +229,12 @@ const mytimeto = doctor?.end;
                       selected={startDate}
                       onChange={(date) => setStartDate(date)}
                       showTimeSelect
-                      // showTimeSelectOnly
-                      // excludeTimes={new Date(0, 0, 0, 11, 0)}
-                      minTime={new Date(0, 0, 0, mintime, mintime_second)} // 7:00am
-                      maxTime={new Date(0, 0, 0, maxtime, maxtime_second)} 
-                      timeIntervals={30}
+                      showTimeSelectOnly
+                      minTime={new Date(0, 0, 0, times, 0)} // 7:00am
+                      maxTime={new Date(0, 0, 0, 13, 0)} 
+                      timeIntervals={15}
                       timeCaption="Time"
-                      dateFormat="MMMM d, yyyy h:mm aa"
-                      placeholderText=" Date & Time"
+                      dateFormat="h:mm aa"
                     />
 
                    

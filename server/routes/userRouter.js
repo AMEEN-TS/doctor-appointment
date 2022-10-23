@@ -1,5 +1,23 @@
 const express = require('express');
-const{register,login,userinfo,verifyemail,deletetoken,resetlink,resetpassword,applyDoctor,markNotifications,deleteNotification,getApprovedDoctor} = require("../controllers/userControllers");
+
+const{
+    register,
+    login,
+    userinfo,
+    verifyemail,
+    deletetoken,
+    resetlink,
+    resetpassword,
+    applyDoctor,
+    markNotifications,
+    deleteNotification,
+    getApprovedDoctor,
+    checkAvilable,
+    bookAppointment,
+    appointmentData,
+    checkOut,
+    verifyPayment
+} = require("../controllers/userControllers");
 const authMiddleWare = require("../middlewares/authMiddleWare");
 const storage = require ("../utils/multer");
 
@@ -21,6 +39,12 @@ router.post('/apply-doctor-account',storage.single('image'),authMiddleWare,apply
 router.post('/mark-all-notifications-as-seen',authMiddleWare,markNotifications)
 router.post('/delete-all-notifications',authMiddleWare,deleteNotification)
 router.get('/get-all-approved-doctors',getApprovedDoctor)
+router.post('/check-booking-avilability',authMiddleWare,checkAvilable)
+router.post('/book-appointment',authMiddleWare,bookAppointment)
+router.post('/get-appointment-details-by-id',authMiddleWare,appointmentData)
+router.post('/checkout',authMiddleWare,checkOut)
+router.post('/verify',verifyPayment)
+
 
 
 

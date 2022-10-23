@@ -49,8 +49,7 @@ function Profile() {
     // formdata.append("timings",e.target.timings.value)
     formdata.append("image", image);
     // formdata.append("userid",user)
-    console.log(formdata, "frt fromdat log");
-    console.log(image, "iiiiiiiiiiiiiiiiiiiii")
+   
     try {
       dispatch(showLoading());
       const response = await axios.post(

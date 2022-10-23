@@ -23,11 +23,7 @@ function DoctorHome() {
                 {
                     doctorId: params.doctorId,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("user")}`
-                    },
-                }
+                
             );
             dispatch(hideLoading());
             if (response.data.success) {
@@ -46,7 +42,7 @@ function DoctorHome() {
     return (
         <>
             <Navbar />
-            <div className="gradient-custom-2" style={{ backgroundColor: '#E8EDF2', paddingTop: "50px",backgroundImage:"url(" + "https://plus.unsplash.com/premium_photo-1661698939645-8c8690757830?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" + ")" ,backgroundPosition:"center",backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
+            <div className="gradient-custom-2" style={{ backgroundColor: '', paddingTop: "50px",backgroundImage:"url(" + "https://plus.unsplash.com/premium_photo-1661698939645-8c8690757830?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" + ")" ,backgroundPosition:"center",backgroundRepeat:"no-repeat",backgroundSize:"cover"}}>
                 <MDBContainer className="py-5 h-100">
                     <MDBRow className="justify-content-center align-items-center h-100">
                         <MDBCol lg="9" xl="7">

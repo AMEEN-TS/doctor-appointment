@@ -1,11 +1,14 @@
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
+const Appointment = require("../models/appointmentModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendEmail = require('../verify/sendEmail');
 const Token = require("../models/tokenModel");
 const cloudinary = require("../utils/cloudinary");
 const moment = require('moment');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -56,10 +59,10 @@ module.exports.login = async (req, res) => {
               success: true,
               message: "user Login Sucesssfull",
               data: token,
-              userData:user,
+              userData: user,
             });
-          }else{
-            res.status(200).send({success:false,message:"your are blocked"})
+          } else {
+            res.status(200).send({ success: false, message: "your are blocked" })
           }
 
         } else {
@@ -285,6 +288,172 @@ module.exports.getApprovedDoctor = async (req, res) => {
 
 
 };
+module.exports.checkAvilable = async (req, res) => {
+  try {
+    console.log(req.body.dateAndtime, "rrrrrrrrrr")
+    const timeAnddate = moment(req.body.dateAndtime).format('llll');
+    console.log(timeAnddate, "pppppppppppppp")
+
+    const doctorId = req.body.doctorId;
+
+
+    const appointment = await Appointment.find({
+      doctorId: doctorId,
+      dateAndtime: timeAnddate
+
+    });
+    console.log(appointment, "sssssssssss")
+    if (appointment.length > 0) {
+      return res.status(200).send({ message: "Appointments not available", success: false, })
+    } else {
+      return res.status(200).send({ message: "Appointments avaialable", success: true })
+    }
+
+  } catch (error) {
+
+  }
+}
+
+// module.exports.checkAvilable = async (req, res) => {
+
+//   try {
+
+//     const date = moment(req.body.date, "DD-MM-YYYY").format("DD-MM-YYYY")
+//     const fromTime = moment(req.body.time, ["hh:mm a"])
+//       .subtract(60, "minutes").format('hh:mm a')
+//     const toTime = moment(req.body.time, "hh:mm a")
+//       .add(60, "minutes").format("hh:mm: a")
+
+
+
+
+
+//     const doctorId = req.body.doctorId;
+
+//     const appointment = await Appointment.find({
+//       doctorId,
+//       date,
+//       time: { $gte: fromTime, $lte: toTime },
+//     });
+//     console.log(appointment,"sssssssssss")
+//     if (appointment.length > 0) {
+//       return res.status(200).send({ message: "Appointments not available", success: false, })
+//     } else {
+//       return res.status(200).send({ message: "Appointments avaialable", success: true })
+//     }
+
+//   } catch (error) {
+//     res.status(500).send({ message: "Error booking appointment", success: false, error })
+
+//   }
+
+// };
+
+module.exports.bookAppointment = async (req, res) => {
+
+  try {
+
+    req.body.dateAndtime = moment(req.body.dateAndtime).format('llll');
+
+    const newAppointment = new Appointment(req.body);
+    await newAppointment.save();
+
+    const user = await User.findOne({ _id: req.body.doctorInfo.userId })
+    user.unseenNotifications.push({
+      type: "new-appointment-request",
+      message: `A new appointment request has been made by ${req.body.userInfo.name}`,
+      onClickPath: "/doctor/appointments",
+    })
+    await user.save();
+    res.status(200).send({ message: "Appointment booked successfully", success: true, data: newAppointment })
+
+  } catch (error) {
+    res.status(500).send({ message: "Error booking appointment", success: false })
+  }
+};
+
+module.exports.appointmentData = async (req, res) => {
+
+  try {
+    const appointmentData = await Appointment.findOne({
+      _id: req.body.appointmentId
+    })
+
+    res.status(200).send({ message: " data fetched successfully", success: true, data: appointmentData })
+  } catch (error) {
+    res.status(500).send({ message: "dont get appointment id", success: false, error })
+  }
+
+};
+
+module.exports.checkOut = async (req, res) => {
+  console.log(req.body)
+  try {
+
+    const appointmentData = await Appointment.findByIdAndUpdate(
+      {
+        _id: req.body.appointmentId
+      },
+      {
+        payment: "online"
+      }
+    )
+
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_ID,
+      key_secret: process.env.RAZORPAY_KEY,
+    });
+
+    const options = {
+      amount: req.body.amount * 100,
+      currency: "INR",
+      receipt: crypto.randomBytes(10).toString("hex"),
+    };
+
+    instance.orders.create(options, (error, order) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Something Went Wrong!" });
+      }
+      res.status(200).send({ data: order });
+    });
+
+
+  } catch (error) {
+
+    res.status(500).send({ message: "Internal Server Error!" });
+    console.log(error);
+  }
+
+};
+
+module.exports.verifyPayment = async (req, res) => {
+
+  console.log(req.body,"lllllllllllllllllllllllll")
+  try {
+
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY)
+      .update(sign.toString())
+      .digest("hex");
+
+    if (razorpay_signature === expectedSign) {
+      return res.status(200).json({ message: "Payment verified successfully" });
+    } else {
+      return res.status(400).json({ message: "Invalid signature sent!" });
+    }
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Internal Server Error!" });
+    console.log(error);
+
+  }
+
+}
 
 
 

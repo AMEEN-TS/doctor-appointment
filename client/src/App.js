@@ -1,6 +1,12 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter, Routes, Route, Navigate, Router, } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Router,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 import Login from "./pages/User/Login";
 import Register from "./pages/User/REgister";
@@ -16,6 +22,7 @@ import DoctorProfile from "./pages/doctor/Profile";
 import BookAppointment from "./pages/User/BookAppointment";
 import Doctor from "./pages/doctor/DoctorHome";
 import Admin from "./pages/admin/AdminHome";
+import CheckOut from "./pages/User/checkOut";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -35,70 +42,72 @@ function App() {
             <PublicRoutes>
               <Login />
             </PublicRoutes>
-            
-
           }
         />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={
+        <Route path="/" element={<Home />} />
 
-
-          <Home />
-
-
-        } />
-
-        <Route path="/verifyemail/:token" element={
-          <PublicRoutes>
-            <Verifyemail />
-          </PublicRoutes>
-        }
+        <Route
+          path="/verifyemail/:token"
+          element={
+            <PublicRoutes>
+              <Verifyemail />
+            </PublicRoutes>
+          }
         />
 
-        <Route path="/resetpassword/:token" element={
-          <PublicRoutes>
-            <ResetPassword />
-          </PublicRoutes>
-        }
+        <Route
+          path="/resetpassword/:token"
+          element={
+            <PublicRoutes>
+              <ResetPassword />
+            </PublicRoutes>
+          }
         />
 
-        <Route path="/apply-doctor" element={
-          <ProtectedRoutes>
-            <ApplyDoctor />
-          </ProtectedRoutes>
-
-        }
+        <Route
+          path="/apply-doctor"
+          element={
+            <ProtectedRoutes>
+              <ApplyDoctor />
+            </ProtectedRoutes>
+          }
         />
 
-        <Route path="/notifications" element={
-          <ProtectedRoutes>
-            <Notification />
-          </ProtectedRoutes>
-
-        }
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoutes>
+              <Notification />
+            </ProtectedRoutes>
+          }
         />
-        <Route path="/admin/doctorslist" element={
-          <ProtectedRoutes>
-            <DoctorsList />
-          </ProtectedRoutes>
-
-        }
-        />
-
-        <Route path="/admin/userslist" element={
-          <ProtectedRoutes>
-            <UserList />
-          </ProtectedRoutes>
-
-        }
+        <Route
+          path="/admin/doctorslist"
+          element={
+            <ProtectedRoutes>
+              <DoctorsList />
+            </ProtectedRoutes>
+          }
         />
 
-        <Route path="/doctor/profile/:userId" element={
-          <ProtectedRoutes>
-            <DoctorProfile />
-          </ProtectedRoutes>
-        }
+        <Route
+          path="/admin/userslist"
+          element={
+            <ProtectedRoutes>
+              <UserList />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/doctor/profile/:userId"
+          element={
+            <ProtectedRoutes>
+              <DoctorProfile />
+            </ProtectedRoutes>
+          }
         />
 
         <Route
@@ -110,24 +119,16 @@ function App() {
           }
         />
 
-        <Route path="/doctor-info/:doctorId" element={
+        <Route path="/doctor-info/:doctorId" element={<Doctor />} />
 
+        <Route path="/admin" element={<Admin />} />
 
-          <Doctor />
-
-
-        } />
-        <Route path="/admin" element={
-
-
-          <Admin />
-
+        <Route path="/checkout/:appointmentId" element={
+          <ProtectedRoutes>
+            <CheckOut />
+          </ProtectedRoutes>
 
         } />
-
-
-
-
 
       </Routes>
     </BrowserRouter>

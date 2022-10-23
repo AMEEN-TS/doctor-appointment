@@ -18,7 +18,7 @@ function Doctor({doctor}) {
     }}
     cover={<img style={{objectFit:"fill",height:"200px"}} alt="example" src={doctor.image} />}
   >
-    <Meta  title={doctor.firstName} description={doctor.specialization} />
+    <Meta  title= {doctor.firstName} description={doctor.specialization} />
   </Card>
   )
 }
