@@ -290,9 +290,9 @@ module.exports.getApprovedDoctor = async (req, res) => {
 };
 module.exports.checkAvilable = async (req, res) => {
   try {
-    console.log(req.body.dateAndtime, "rrrrrrrrrr")
+
     const timeAnddate = moment(req.body.dateAndtime).format('llll');
-    console.log(timeAnddate, "pppppppppppppp")
+
 
     const doctorId = req.body.doctorId;
 
@@ -312,42 +312,7 @@ module.exports.checkAvilable = async (req, res) => {
   } catch (error) {
 
   }
-}
-
-// module.exports.checkAvilable = async (req, res) => {
-
-//   try {
-
-//     const date = moment(req.body.date, "DD-MM-YYYY").format("DD-MM-YYYY")
-//     const fromTime = moment(req.body.time, ["hh:mm a"])
-//       .subtract(60, "minutes").format('hh:mm a')
-//     const toTime = moment(req.body.time, "hh:mm a")
-//       .add(60, "minutes").format("hh:mm: a")
-
-
-
-
-
-//     const doctorId = req.body.doctorId;
-
-//     const appointment = await Appointment.find({
-//       doctorId,
-//       date,
-//       time: { $gte: fromTime, $lte: toTime },
-//     });
-//     console.log(appointment,"sssssssssss")
-//     if (appointment.length > 0) {
-//       return res.status(200).send({ message: "Appointments not available", success: false, })
-//     } else {
-//       return res.status(200).send({ message: "Appointments avaialable", success: true })
-//     }
-
-//   } catch (error) {
-//     res.status(500).send({ message: "Error booking appointment", success: false, error })
-
-//   }
-
-// };
+};
 
 module.exports.bookAppointment = async (req, res) => {
 
@@ -387,7 +352,7 @@ module.exports.appointmentData = async (req, res) => {
 };
 
 module.exports.checkOut = async (req, res) => {
-  console.log(req.body)
+
   try {
 
     const appointmentData = await Appointment.findByIdAndUpdate(
@@ -429,7 +394,7 @@ module.exports.checkOut = async (req, res) => {
 
 module.exports.verifyPayment = async (req, res) => {
 
-  console.log(req.body,"lllllllllllllllllllllllll")
+
   try {
 
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
@@ -441,7 +406,10 @@ module.exports.verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
-      return res.status(200).json({ message: "Payment verified successfully" });
+      return res.status(200).json({
+        message: "Payment verified successfully",
+        success: true
+      });
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });
     }
@@ -453,7 +421,45 @@ module.exports.verifyPayment = async (req, res) => {
 
   }
 
+};
+
+module.exports.cashPayment = async(req,res) =>{
+  
+  try{
+    const cashpayment = await Appointment.findByIdAndUpdate(
+      {
+        _id: req.body.appointmentId
+      },
+      {
+        payment: "Cash"
+      }
+    )
+    res.status(200).send({message:"Payment verified successfully",success:true})
+  }catch(error){
+    res.status(500).json({ message: "payment Not success" });
+  }
 }
+
+module.exports.Appointments = async (req,res)=>{
+
+  try{
+    const appointments = await Appointment.find({ userId: req.body.userId }).sort({_id:-1});
+    res.status(200).send({
+      message: "Appointments fetched successfully",
+      success: true,
+      data: appointments,
+    });
+
+  }catch(error){
+    res.status(500).send({
+      message: "Error fetching appointments",
+      success: false,
+      error,
+    });
+
+  }
+};
+
 
 
 

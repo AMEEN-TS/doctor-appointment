@@ -25,7 +25,7 @@ function BookAppointment() {
   const [doctor, setDoctor] = useState(null);
   const params = useParams();
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState(false);
   // const [max, setMax] = useState(new  Date());
   // const [min ,setMin] = useState(new Date());
   const times =7;
@@ -71,37 +71,42 @@ const mytimeto = doctor?.end;
   const maxtime_second = endtime.split(":")[1]
 
  
-
+console.log(startDate,"oooooooooooooooooooooooo")
 
   const checkAvailability = async () => {
-    try {
-      dispatch(showLoading());
-      const response = await axios.post(
-        "/api/user/check-booking-avilability",
-        {
-          doctorId: params.doctorId,
-          // date: date,
-          // time: time,
-          dateAndtime:startDate
-
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("user")}`,
+    if(startDate){
+      try {
+        dispatch(showLoading());
+        const response = await axios.post(
+          "/api/user/check-booking-avilability",
+          {
+            doctorId: params.doctorId,
+            // date: date,
+            // time: time,
+            dateAndtime:startDate
+  
           },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("user")}`,
+            },
+          }
+        );
+        dispatch(hideLoading());
+        if (response.data.success) {
+          toast.success(response.data.message);
+          setIsAvailable(true);
+        } else {
+          toast.error(response.data.message);
         }
-      );
-      dispatch(hideLoading());
-      if (response.data.success) {
-        toast.success(response.data.message);
-        setIsAvailable(true);
-      } else {
-        toast.error(response.data.message);
+      } catch (error) {
+        toast.error("Error booking appointment");
+        dispatch(hideLoading());
       }
-    } catch (error) {
-      toast.error("Error booking appointment");
-      dispatch(hideLoading());
+    }else{
+      toast.error("Please Select Time and Date");
     }
+    
   };
   const bookNow = async () => {
     setIsAvailable(false);

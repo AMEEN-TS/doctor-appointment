@@ -1,6 +1,7 @@
 
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
+const Appointment = require("../models/appointmentModel");
 
 
 
@@ -86,7 +87,7 @@ module.exports.getuserinfo = async (req, res) => {
 module.exports.changeUserStatus = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate({ _id: req.body.userid }, { isBlock: req.body.status })
-        res.status(200).send({ message: ` ${user.name } ${req.body.status}` , success: true})
+        res.status(200).send({ message: ` ${user.name} ${req.body.status}`, success: true })
     }
     catch (error) {
         res.status(400).send({
@@ -94,5 +95,14 @@ module.exports.changeUserStatus = async (req, res) => {
             success: false,
             error,
         })
+    }
+};
+
+module.exports.getAllAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.find({}).sort({ _id: -1 });
+        res.status(200).send({ message: "sucess", success: true, data: appointments })
+    } catch (error) {
+        res.status(500).send({ message: "can't fetch data from Appoinments model", success: false, error })
     }
 }

@@ -26,7 +26,7 @@ function Login() {
     try {
       // toast.loading("Loading...");
       dispatch(showLoading());
-      console.log("Received", userObj);
+     
       const response = await axios.post("/api/user/login", userObj);
       // toast.dismiss();
       dispatch(hideLoading());
@@ -34,7 +34,7 @@ function Login() {
         toast.success(response.data.message);
         localStorage.setItem("user", response.data.data);
         const userData = response.data.userData
-        console.log(userData,"infoooooooooooooooo")
+        
         navigate("/");
       } else {
         toast.error(response.data.message);

@@ -126,7 +126,7 @@ function DoctorList() {
             dataIndex: "actions",
             render: (text, record) => (
                 <div className="d-flex">
-                    {record.status === "pending" && (
+                    {record.status === "Pending" && (
                         <h1
                             className="anchor"
                             onClick={() => changeDoctorStatus(record, "approved")}

@@ -16,7 +16,9 @@ const{
     bookAppointment,
     appointmentData,
     checkOut,
-    verifyPayment
+    verifyPayment,
+    Appointments,
+    cashPayment
 } = require("../controllers/userControllers");
 const authMiddleWare = require("../middlewares/authMiddleWare");
 const storage = require ("../utils/multer");
@@ -44,6 +46,8 @@ router.post('/book-appointment',authMiddleWare,bookAppointment)
 router.post('/get-appointment-details-by-id',authMiddleWare,appointmentData)
 router.post('/checkout',authMiddleWare,checkOut)
 router.post('/verify',verifyPayment)
+router.get('/get-appointments-by-user-id',authMiddleWare,Appointments)
+router.post('/cashpayment',authMiddleWare,cashPayment)
 
 
 

@@ -19,22 +19,23 @@ import {
 import Doctor from "../../components/Doctor";
 
 export default function App() {
+    const navigate = useNavigate()
     const params = useParams();
     const dispatch = useDispatch();
     const [data, setData] = useState();
     const [cod, setCod] = useState(false);
     const [online, setOnline] = useState(false);
 
-    const setruecod=()=>{
+    const setruecod = () => {
         setCod(true);
     }
 
-    const settrueonline=()=>{
+    const settrueonline = () => {
         setOnline(true);
         setCod(false);
     }
 
-    
+
 
     const getData = async () => {
         try {
@@ -56,7 +57,7 @@ export default function App() {
 
             }
         } catch (error) {
-            console.log(error);
+
             toast.error("Error ");
             dispatch(hideLoading());
 
@@ -64,42 +65,46 @@ export default function App() {
     };
 
 
-    const initPayment =  (data) => {
-        console.log(data.id,"hhhhhhhhhhhhhhh")
-		const options = {
-			key: 'rzp_test_84tvlHhdgoF507',
-			amount: data.amount,
-			currency: data.currency,
-			name: "aaaaa",
-			description: "Test Transaction",
-			image:"https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
-			order_id: data.id,
-			handler: async (response) => {
-				try {
-					const verifyUrl = "/api/user/verify";
-					const { data } = await axios.post(verifyUrl, response);
-					console.log(data);
-				} catch (error) {
-					console.log(error);
-				}
-			},
-			theme: {
-				color: "#3399cc",
-			},
-		};
-		const rzp1 = new window.Razorpay(options);
-		rzp1.open();
-	};
+    const initPayment = (data) => {
+
+        const options = {
+            key:  process.env.RAZORPAY_ID,
+            amount: data.amount,
+            currency: data.currency,
+            name: "aaaaa",
+            description: "Test Transaction",
+            image: "https://images-na.ssl-images-amazon.com/images/I/817tHNcyAgL.jpg",
+            order_id: data.id,
+            handler: async (response) => {
+                try {
+                    const verifyUrl = "/api/user/verify";
+                    const { data } = await axios.post(verifyUrl, response);
+                    if (data.success) {
+                        navigate('/')
+                        toast.success(data.message);
+                    }
+                    console.log(data);
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+    };
 
     const amount = data?.doctorInfo.feePerCunsultation
-    
+
     const payment = async () => {
 
-        if(online){
-            
-            try{
-                
-                const {data} = await axios.post(
+        if (online) {
+
+            try {
+
+                const { data } = await axios.post(
                     "/api/user/checkout",
                     {
                         appointmentId: params.appointmentId,
@@ -109,34 +114,52 @@ export default function App() {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("user")}`,
                         },
-                    
+
                     }
                 );
-                
-                console.log(data,"kkkkkkkkkkkkkkkkkkkk");
+
+
                 initPayment(data.data);
-            
-                
-			   
-            }catch(error){
-               
+
+
+
+            } catch (error) {
+                toast.error("something Error")
             }
 
-        }else if(cod){
+        } else if (cod) {
+            dispatch(showLoading());
+            try {
+                const response = await axios.post(
+                    "/api/user/cashpayment",
+                    {
+                        appointmentId: params.appointmentId,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("user")}`,
+                        },
+                    }
+                );
+                dispatch(hideLoading());
+                if(response.data.success){
+                    navigate('/')
+                    toast.success(response.data.message);
+                }
 
-            try{
 
-            }catch(error){
-
+            } catch (error) {
+                dispatch(hideLoading());
+                toast.error("Error ");
             }
 
         }
-        
+
     };
 
- 
 
-    
+
+
 
 
 
@@ -362,7 +385,7 @@ export default function App() {
                                             <h4>Order Recap</h4>
                                         </div>
                                         <div className="p-2 d-flex">
-                                            <MDBCol size="8">Consultant free</MDBCol>
+                                            <MDBCol size="8">Consultant fee</MDBCol>
                                             <div className="ms-auto">{data?.doctorInfo.feePerCunsultation}</div>
                                         </div>
                                         {/* <div className="p-2 d-flex">
@@ -420,7 +443,7 @@ export default function App() {
                                     </div>
                                     <div className="d-flex flex-row pb-3 pt-3">
                                         <div className="d-flex align-items-center pe-2">
-                                            <MDBRadio name="radioNoLabel" id="radioNoLabel1"  onClick={setruecod} />
+                                            <MDBRadio name="radioNoLabel" id="radioNoLabel1" onClick={setruecod} />
                                         </div>
                                         <div className="rounded border d-flex w-100 p-3 align-items-center">
                                             <p className="mb-0">
@@ -451,12 +474,18 @@ export default function App() {
                                             </p>
                                             <div className="ms-auto">************1038</div>
                                         </div>
+
                                     </div>
-                                    <MDBBtn block size="lg" onClick={payment} >
+
+                                    <button className='btn ' style={{ background: '#063970', color: 'white' }} onClick={payment} >
                                         Proceed to payment
-                                    </MDBBtn>
+                                    </button>
+                                    {/* <MDBBtn color="success" size="md" block>
+                                        Proceed to payment
+                                    </MDBBtn> */}
 
                                 </MDBCol>
+
                             </MDBRow>
                         </MDBCardBody>
                     </MDBCard>

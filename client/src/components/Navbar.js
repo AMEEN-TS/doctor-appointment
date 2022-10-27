@@ -37,8 +37,8 @@ function Navbar() {
       path: "/apply-doctor"
     },
     {
-      name: "Make an Appointment",
-      path: "",
+      name: "Appointments",
+      path: "/appointments",
     },
     {
       name: "Contact",
@@ -54,7 +54,7 @@ function Navbar() {
     },
     {
       name: "Appointments",
-      path: "",
+      path: "/doctor/appointments",
 
     },
     {
@@ -81,13 +81,13 @@ function Navbar() {
 
     },
     {
-      name: "Profile",
-      path: "",
+      name: "Appointments",
+      path: "/admin/appointments",
 
     },
   ];
 
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
@@ -120,16 +120,16 @@ function Navbar() {
       // toast.dismiss();
       if (response.data.success) {
         const userData = response.data.data;
-        
-        if(userData.isBlock === "block"){
-          localStorage.clear();
-           toast.error("Your are blocked");
 
-        }else{
+        if (userData.isBlock === "block") {
+          localStorage.clear();
+          toast.error("Your are blocked");
+
+        } else {
           // setUserInfo(response.data.data);
-        dispatch(setUser(response.data.data));
+          dispatch(setUser(response.data.data));
         }
-        
+
       } else {
         // localStorage.removeItem("user");
         // navigate("/login");
@@ -196,7 +196,7 @@ function Navbar() {
                     size="large"
                     aria-label="show 17 new notifications"
                     color="inherit"
-                  onClick={()=>navigate("/notifications")}
+                    onClick={() => navigate("/notifications")}
                   >
                     <Badge badgeContent={user?.unseenNotifications.length} color="error">
                       <NotificationsIcon />
@@ -228,18 +228,51 @@ function Navbar() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    {user == null ? (
+                    {user?.isAdmin ? (
+
+                      <div>
+                        <MenuItem sx={{ color: "#063970" }} >
+                        {user.name}
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          localStorage.clear();
+                          navigate("/login");
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                      </div>
+
+                    ) : user?.isDoctor ? (
+                      <div>
+                          <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
+                        {user.name}
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          localStorage.clear();
+                          navigate("/login");
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                      </div>
+                    ) : 
+
+                      <div>
+                        {user == null ? (
                       <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
                         Profile
                       </MenuItem>
                     ) : (
-                      <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
+                      <MenuItem sx={{ color: "#063970" }} >
                         {user.name}
                       </MenuItem>
                     )}
-
-                    {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                     <MenuItem onClick={handleClose}>My account</MenuItem>
                     {user == null ? (
                       <MenuItem onClick={() => navigate("/login")}>
                         Login
@@ -254,6 +287,36 @@ function Navbar() {
                         Logout
                       </MenuItem>
                     )}
+                      </div>
+
+                    }
+
+                    {/* {user == null ? (
+                      <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
+                        Profile
+                      </MenuItem>
+                    ) : (
+                      <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
+                        {user.name}
+                      </MenuItem>
+                    )}
+
+                    
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    {user == null ? (
+                      <MenuItem onClick={() => navigate("/login")}>
+                        Login
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        onClick={() => {
+                          localStorage.clear();
+                          navigate("/login");
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    )} */}
                   </Menu>
                 </div>
               )}

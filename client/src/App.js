@@ -23,6 +23,9 @@ import BookAppointment from "./pages/User/BookAppointment";
 import Doctor from "./pages/doctor/DoctorHome";
 import Admin from "./pages/admin/AdminHome";
 import CheckOut from "./pages/User/checkOut";
+import Appointments from "./pages/User/Appointments";
+import DoctorAppointments from "./pages/doctor/DoctorAppointments";
+import Allappointments from "./pages/admin/Allappointments";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -123,12 +126,34 @@ function App() {
 
         <Route path="/admin" element={<Admin />} />
 
-        <Route path="/checkout/:appointmentId" element={
-          <ProtectedRoutes>
-            <CheckOut />
-          </ProtectedRoutes>
+        <Route
+          path="/checkout/:appointmentId"
+          element={
+            <ProtectedRoutes>
+              <CheckOut />
+            </ProtectedRoutes>
+          }
+        />
 
-        } />
+        <Route path="/appointments" element={<Appointments />} />
+
+        <Route
+          path="/doctor/appointments"
+          element={
+            <ProtectedRoutes>
+              <DoctorAppointments />
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/admin/appointments"
+          element={
+            <ProtectedRoutes>
+              <Allappointments />
+            </ProtectedRoutes>
+          }
+        />
 
       </Routes>
     </BrowserRouter>

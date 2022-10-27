@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../pages/Redux/userSlice"
 import axios from "axios";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   AppBar,
   Button,
@@ -25,6 +25,7 @@ import DrawerComp from "../pages/User/Drawer";
 
 function Navbar() {
 
+  const { user } = useSelector((state) => state.user);
 
   const userMenu = [
     {
@@ -36,8 +37,8 @@ function Navbar() {
       path: "/apply-doctor"
     },
     {
-      name: "Make an Appointment",
-      path: "",
+      name: "Appointments",
+      path: "/appointments",
     },
     {
       name: "Contact",
@@ -53,12 +54,12 @@ function Navbar() {
     },
     {
       name: "Appointments",
-      path: "",
+      path: "/doctor/appointments",
 
     },
     {
       name: "Profile",
-      path: ""
+      path: `/doctor/profile/${user?._id}`
 
     }
   ];
@@ -86,7 +87,7 @@ function Navbar() {
     },
   ];
 
-  const { user } = useSelector((state) => state.user);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
@@ -118,8 +119,17 @@ function Navbar() {
       });
       // toast.dismiss();
       if (response.data.success) {
-        // setUserInfo(response.data.data);
+        const userData = response.data.data;
+        
+        if(userData.isBlock === "block"){
+          localStorage.clear();
+           toast.error("Your are blocked");
+
+        }else{
+          // setUserInfo(response.data.data);
         dispatch(setUser(response.data.data));
+        }
+        
       } else {
         // localStorage.removeItem("user");
         // navigate("/login");

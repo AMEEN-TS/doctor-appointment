@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
+const Appointment = require("../models/appointmentModel");
 const cloudinary = require("../utils/cloudinary");
 const moment = require('moment');
 
@@ -18,12 +19,12 @@ module.exports.doctorData = async (req, res) => {
 
 module.exports.updateDoctor = async (req, res) => {
 
-   
+
 
     try {
-       
+
         const result = await cloudinary.uploader.upload(req.file.path)
-       
+
         const starttime = moment(req.body.start, ["HH:mm"]).format("hh:mm a");
         const endtime = moment(req.body.end, ["HH:mm"]).format("hh:mm a");
 
@@ -38,30 +39,87 @@ module.exports.updateDoctor = async (req, res) => {
                 experience: req.body.experience,
                 feePerCunsultation: req.body.feePerConsultation,
                 start: starttime,
-                end: endtime,                   
+                end: endtime,
                 image: result.url,
                 userId: req.body.userId,
             })
-         
-            
-        res.status(200).send({message:"Doctor profile updated successfully",success:true})    
-    }catch(error){
+
+
+        res.status(200).send({ message: "Doctor profile updated successfully", success: true })
+    } catch (error) {
         console.log(error);
-        res.status(500).send({message: "Error getting doctor info", success: false, error})
+        res.status(500).send({ message: "Error getting doctor info", success: false, error })
     }
 };
 
-module.exports.getdoctorbyId = async (req,res) =>{
+module.exports.getdoctorbyId = async (req, res) => {
     try {
         const doctor = await Doctor.findOne({ _id: req.body.doctorId });
         res.status(200).send({
-          success: true,
-          message: "Doctor info fetched successfully",
-          data: doctor,
+            success: true,
+            message: "Doctor info fetched successfully",
+            data: doctor,
         });
-      } catch (error) {
+    } catch (error) {
         res
-          .status(500)
-          .send({ message: "Error getting doctor info", success: false, error });
-      }
+            .status(500)
+            .send({ message: "Error getting doctor info", success: false, error });
+    }
+};
+
+module.exports.DoctorAppointments = async (req, res) => {
+
+    try {
+
+        const doctor = await Doctor.findOne({ userId: req.body.userId });
+        const appointments = await Appointment.find({ doctorId: doctor._id }).sort({ _id: -1 });
+        res.status(200).send({
+            message: "Appointments fetched successfully",
+            success: true,
+            data: appointments,
+        });
+
+
+    } catch (error) {
+
+        res.status(500).send({
+            message: "Error fetching appointments",
+            success: false,
+            error,
+        });
+    }
+};
+
+module.exports.ChangeAppointmentStatus = async (req, res) => {
+
+    try {
+
+        const { appointmentId, status } = req.body;
+        const appointment = await Appointment.findByIdAndUpdate(appointmentId, {
+            status,
+        });
+
+        const user = await User.findOne({ _id: appointment.userId });
+        const unseenNotifications = user.unseenNotifications;
+        unseenNotifications.push({
+            type: "appointment-status-changed",
+            message: `Your appointment status has been ${status}`,
+            onClickPath: "/appointments",
+        });
+
+        await user.save();
+
+        res.status(200).send({
+            message: "Appointment status updated successfully",
+            success: true
+        });
+
+    } catch (error) {
+
+        res.status(500).send({
+            message: "Error changing appointment status",
+            success: false,
+            error,
+        });
+    }
 }
