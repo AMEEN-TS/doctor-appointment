@@ -26,6 +26,7 @@ import CheckOut from "./pages/User/checkOut";
 import Appointments from "./pages/User/Appointments";
 import DoctorAppointments from "./pages/doctor/DoctorAppointments";
 import Allappointments from "./pages/admin/Allappointments";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -151,6 +152,14 @@ function App() {
           element={
             <ProtectedRoutes>
               <Allappointments />
+            </ProtectedRoutes>
+          }
+        />
+           <Route
+          path="/account"
+          element={
+            <ProtectedRoutes>
+              <UserProfile />
             </ProtectedRoutes>
           }
         />

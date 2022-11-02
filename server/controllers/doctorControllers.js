@@ -122,4 +122,21 @@ module.exports.ChangeAppointmentStatus = async (req, res) => {
             error,
         });
     }
+};
+
+module.exports.DoctorHome = async (req, res) => {
+    try {
+        const id = req.body.userId
+        const doctor = await Doctor.findOne({ userId: id });
+        const appointmenst = await Appointment.find({ $and: [{ doctorId: doctor._id }, { status: "Pending" }] }).sort({ _id: -1 })
+        const appointmentcount = appointmenst.length;
+        const totalappoinments = await Appointment.find({ doctorId: doctor._id });
+        const totaappointmentscount = totalappoinments.length;
+
+        res.status(200).send({ message: "sucess", success: true, data: appointmenst, appointmentcount: appointmentcount, totalappointmentscount: totaappointmentscount })
+
+    } catch (error) {
+
+
+    }
 }

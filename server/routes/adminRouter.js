@@ -1,6 +1,6 @@
 const express = require('express');
 const authMiddleWare = require("../middlewares/authMiddleWare");
-const {getDoctor,changeDoctorStatus,getuserinfo,changeUserStatus,getAllAppointments}= require  ("../controllers/adminControllers")
+const {getDoctor,changeDoctorStatus,getuserinfo,changeUserStatus,getAllAppointments,getPendingDoctor}= require  ("../controllers/adminControllers")
 
 
 
@@ -13,6 +13,7 @@ router.post("/change-doctor-account-status",authMiddleWare,changeDoctorStatus)
 router.get('/get-all-users',authMiddleWare,getuserinfo)
 router.post('/change-user-account-status',authMiddleWare,changeUserStatus)
 router.get('/get-all-appointmenst',authMiddleWare,getAllAppointments)
+router.get('/get-pending-doctor',authMiddleWare,getPendingDoctor)
 
 
 

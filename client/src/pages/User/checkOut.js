@@ -453,7 +453,7 @@ export default function App() {
                                                     size="lg"
                                                     className="text-primary pe-2"
                                                 />{" "}
-                                                COD
+                                                Cash
                                             </p>
                                             {/* <div className="ms-auto">************3456</div> */}
                                         </div>

@@ -19,8 +19,8 @@ function BookAppointment() {
   const [name, setName] = useState();
   const [age, setAge] = useState();
   const [phonenumber, setNumber] = useState();
-  const [date, setDate] = useState();
-  const [time, setTime] = useState();
+  // const [date, setDate] = useState();
+  // const [time, setTime] = useState();
   const { user } = useSelector((state) => state.user);
   const [doctor, setDoctor] = useState(null);
   const params = useParams();
@@ -240,7 +240,7 @@ console.log(startDate,"oooooooooooooooooooooooo")
                         setTime(moment(value, ["hh:mm a"]).format("hh:mm a"));
                       }}
                     /> */}
-                    <DatePicker
+                    <DatePicker 
                       selected={startDate}
                       onChange={(date) => setStartDate(date)}
                       showTimeSelect

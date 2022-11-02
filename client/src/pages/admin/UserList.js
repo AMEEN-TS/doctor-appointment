@@ -51,6 +51,8 @@ function UserList() {
         }
     };
 
+    
+
     useEffect(() => {
         getUsersData();
     }, []);
@@ -67,7 +69,8 @@ function UserList() {
         {
             title: "Created At",
             dataIndex: "createdAt",
-            render: (record, text) => moment(record.createdAt).format("DD-MM-YYYY"),
+            
+            render: ( text,record) => moment(record.createdAt).format("DD/MM/YYYY"),
         },
         {
             title: "Actions",
@@ -96,7 +99,7 @@ function UserList() {
             ),
         },
     ];
-
+   
     return (
         <>
             <Navbar />

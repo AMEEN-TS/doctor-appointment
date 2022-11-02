@@ -1,6 +1,6 @@
 const express = require('express');
 const authMiddleWare = require("../middlewares/authMiddleWare");
-const {doctorData,updateDoctor,getdoctorbyId,DoctorAppointments,ChangeAppointmentStatus} = require("../controllers/doctorControllers")
+const {doctorData,updateDoctor,getdoctorbyId,DoctorAppointments,ChangeAppointmentStatus,DoctorHome} = require("../controllers/doctorControllers")
 const storage = require ("../utils/multer");
 
 
@@ -16,6 +16,8 @@ router.post("/doctorupdate-profile",storage.single('image'),authMiddleWare,updat
 router.post("/get-doctor-info-by-id",getdoctorbyId)
 router.get("/get-appointments-by-doctor-id",authMiddleWare,DoctorAppointments)
 router.post("/change-appointment-status",authMiddleWare,ChangeAppointmentStatus)
+router.get("/doctorhome",authMiddleWare,DoctorHome)
+
 
 
 

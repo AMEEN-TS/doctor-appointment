@@ -68,6 +68,8 @@ module.exports.getuserinfo = async (req, res) => {
 
     try {
         const users = await User.find({});
+        // users.exclude('title Image');
+        // console.log(users.length,"fffffffffffffffffff")
         res.status(200).send({
             message: "Users fetched successfully",
             success: true,
@@ -105,4 +107,20 @@ module.exports.getAllAppointments = async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: "can't fetch data from Appoinments model", success: false, error })
     }
-}
+};
+
+module.exports.getPendingDoctor = async (req, res) => {
+    try {
+        const pendingdoctor = await Doctor.find({ status: "pending" });
+        const pendingdoctorcount = pendingdoctor.length;
+        const approveddoctor = await Doctor.find({status:"approved"})
+        const approveddoctorcount = approveddoctor.length;
+        const verifyuser = await User.find({isverifed:true})
+        const verifyusercount = verifyuser.length;
+        const appointments = await Appointment.find({});
+        const appointmentscount = appointments.length;
+        res.status(200).send({ message: "sucess", success: true, data: pendingdoctor, datacount: pendingdoctorcount,doctorcount:approveddoctorcount,usercount:verifyusercount,appointmentcount:appointmentscount })
+    } catch (error) {
+        res.status(500).send({ message: "can't fetch data", success: false, error })
+    }
+};

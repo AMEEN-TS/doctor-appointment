@@ -234,7 +234,7 @@ function Navbar() {
                         <MenuItem sx={{ color: "#063970" }} >
                         {user.name}
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem onClick={() => navigate("/account")}>My account</MenuItem>
                       <MenuItem
                         onClick={() => {
                           localStorage.clear();
@@ -250,7 +250,7 @@ function Navbar() {
                           <MenuItem sx={{ color: "#063970" }} onClick={handleClose}>
                         {user.name}
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem onClick={() => navigate("/account")}>My account</MenuItem>
                       <MenuItem
                         onClick={() => {
                           localStorage.clear();
@@ -272,7 +272,7 @@ function Navbar() {
                         {user.name}
                       </MenuItem>
                     )}
-                     <MenuItem onClick={handleClose}>My account</MenuItem>
+                     <MenuItem onClick={() => navigate("/account")}>My account</MenuItem>
                     {user == null ? (
                       <MenuItem onClick={() => navigate("/login")}>
                         Login

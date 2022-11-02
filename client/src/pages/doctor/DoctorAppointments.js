@@ -61,12 +61,12 @@ function DoctorAppointments() {
     {
       title: "Patient Name",
       dataIndex: "name",
-      render: (text, record) => <span>{record.userInfo.name}</span>,
+      render: (text, record) => <span>{record.patientname}</span>,
     },
     {
       title: "Phone",
       dataIndex: "phoneNumber",
-      render: (text, record) => <span>{record.doctorInfo.phoneNumber}</span>,
+      render: (text, record) => <span>{record.phonenumber}</span>,
     },
     {
       title: "Date & Time",

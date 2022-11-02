@@ -289,6 +289,7 @@ module.exports.getApprovedDoctor = async (req, res) => {
 
 };
 module.exports.checkAvilable = async (req, res) => {
+  console.log("fffffffffffffffff")
   try {
 
     const timeAnddate = moment(req.body.dateAndtime).format('llll');
