@@ -1,60 +1,97 @@
 # doctor-appointment
 mern stack booking app
 
-Getting Started with Create React App
-This project was bootstrapped with Create React App.
+## Table of contents
 
-Available Scripts
-In the project directory, you can run:
+- [Introduction](#introduction)
+- [Run](#run)
+- [Technology](#technology)
+- [Features](#features)
+- [License](#license)
 
-npm start
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in your browser.
+## Introduction
 
-The page will reload when you make changes.
-You may also see any lint errors in the console.
+Doctor Appointment Booking Application using  Reactjs,Node js, Express js, and MongoDb.
 
-npm test
-Launches the test runner in the interactive watch mode.
-See the section about running tests for more information.
+NOTE: Please read the RUN section before opening an issue.
 
-npm run build
-Builds the app for production to the build folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The application frontend is deployed to vercel and  backend is deployed to cyclic can be accessed through the following link:
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+[doctor Appointment](https://doctor-appointment-client-ameen-ts.vercel.app/)
 
-See the section about deployment for more information.
+The website resembles a real store and you can add products to your cart and wishlist and pay for them. If you want to try the checkout process, you can use the dummy card number/ upi/ Internet Bankinng provided by Razorpay for testing . Please <u><b>DO NOT</b></u> provide real card number and data.
 
-npm run eject
-Note: this is a one-way operation. Once you eject, you can't go back!
+In order to access the admin panel on "/admin" you need to provide the admin email and password.
 
-If you aren't satisfied with the build tool and configuration choices, you can eject at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except eject will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Run
 
-You don't have to ever use eject. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To run this application, you have to set your own environmental variables. For security reasons, some variables have been hidden from view and used as environmental variables with the help of dotenv package. Below are the variables that you need to set in order to run the application:
 
-Learn More
-You can learn more in the Create React App documentation.
+- KEY_ID:     This is the razorpay key_Id (string).
 
-To learn React, check out the React documentation.
+- KEY_SECRET:  This is the razorpay key_Secret (string).
 
-Code Splitting
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- NODE MAILER_email:This is the email id(string)
 
-Analyzing the Bundle Size
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+- NODE MAILER-password : This is the password(String)
 
-Making a Progressive Web App
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+- PORT: Specify the port Number
 
-Advanced Configuration
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+After you've set these environmental variables in the .env file at the root of the project, and intsall node modules using  `npm install`
 
-Deployment
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Now you can run `npm start` in the terminal and the application should work.
 
-npm run build fails to minify
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Technology
+
+The application is built with:
+
+- React.js
+- Node.js 
+- Node mailer
+- MongoDB
+- Express 
+- Bootstrap 
+- material ui 
+- Antid
+- Razorpay
+- SweetAlert
+
+## Features
+
+This is a multi featured web application for booking appointment of doctor. This application has 3 UI interfaces i.e, User,Admin and Doctor.
+
+Users can do the following:
+
+- Login and signup with OTP verification using node mailer
+-Through otp verification, the user can manage forgotten passwords
+- Doctors can be viewed from landing page with name and specialization 
+- User can view single Doctor details
+- User have profile page
+- Doctors search also needed Doctors can be filtered out
+- Payment Gateway is integrated with RAZOR PAY
+- User can apply coupen before final billing
+- User can track the purchased products
+- Status update of tracking is showed on notifications
+
+Admins can do the following:
+
+- Admin login with pre defined credentials
+- Admin Dashboard is implemented with sales report and brand report
+- Admin can handle user and Doctor block , unblock and delete
+- Admin can approve doctors
+- Admin can manage appointment details and doctors details
+
+Doctor can do the following:
+
+- Doctor account only active when admin approved other wise its user
+- Doctor can change profile Details
+- Doctor can give approve for appoinment only for  paymentent sucesss 
+- BookingManagement
+
+## License
+
+[![License](https://img.shields.io/:License-MIT-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
+- MIT License
+- Copyright 2022 © [AMEEN TS](https://github.com/AMEEN-TS/)
